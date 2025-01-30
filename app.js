@@ -5,8 +5,9 @@ console.log(numeroSecreto);
 
 let guess = null;
 let rodada = 1;
+let tentativasRestantes = 10;
 
-while (numeroSecreto != guess){
+while (numeroSecreto != guess || tentativasRestantes != 0){
     guess = prompt(`Rodada ${rodada}\nEscolhe um numero entre 1 e 100, rapidin`);
     console.log(`Rodada ${rodada}`);
     if (numeroSecreto > guess){
@@ -18,8 +19,20 @@ while (numeroSecreto != guess){
     } else if (guess == null){
         alert("Ai tu comprica, tens que digitar algo");
         console.log("Jogador não digitou");
+        rodada--;
     }
-    rodada += 1;
+    rodada++;;
+    tentativasRestantes--;
 }
-alert(`Boa guri(a), acertasse o numero secreto (${numeroSecreto}) em ${rodada - 1} tentativa(s)`);
-console.log("Acertou!");
+
+let palavraRodada = rodada == 2 ? "tentativa" : "tentativas";
+if (tentativasRestantes != 0){
+    if( rodada == 2){
+        alert(`Bah, pia é vidente, acertasse o numero secreto (${numeroSecreto}) em ${rodada - 1} ${palavraRodada}`);
+    }else{
+        alert(`Boa guri(a), acertasse o numero secreto (${numeroSecreto}) em ${rodada - 1} ${palavraRodada}`);
+    }
+    console.log("Acertou!");
+}else{
+    alert(`Que lascada, não acertasse de jeito nenhum! \nO numero secreto era ${numeroSecreto}`);
+}
