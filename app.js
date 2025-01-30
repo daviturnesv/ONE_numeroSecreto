@@ -9,6 +9,10 @@ if (numeroSecreto == guess){
     alert(`Boa guri(a), acertasse o numero ${numeroSecreto}`);
     console.log("Acertou!");
 } else{
-    alert("Bah pia, errasse feio");
+    if (numeroSecreto > guess){
+        alert(`Puts, o numero secreto é maior que ${guess}`);
+    }else{
+        alert(`Bah, o numero secreto é menor que ${guess}`);
+    }
     console.log("Errou!!");
 }
