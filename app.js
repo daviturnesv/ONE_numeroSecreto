@@ -1,6 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
     atualizarHistorico();
     atualizarLeaderboard();
+
+    document.getElementById("nivel").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            iniciarJogo();
+        }
+    });
+
+    document.getElementById("guess").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            fazerPalpite();
+        }
+    });
 });
 
 const niveis = {
@@ -15,9 +27,11 @@ let tentativasRestantes;
 let historicoTentativas;
 let startTime;
 let dicas;
+let nivelSelecionado;
+let ordenarPorTentativas = true;
 
 function iniciarJogo() {
-    const nivelSelecionado = document.getElementById("nivel").value;
+    nivelSelecionado = document.getElementById("nivel").value;
     const nivel = niveis[nivelSelecionado] || niveis.medio;
 
     numeroSecreto = Math.floor(Math.random() * nivel.maxNum) + 1;
@@ -34,16 +48,21 @@ function iniciarJogo() {
 
     document.getElementById("configuracao").classList.add("hidden");
     document.getElementById("game").classList.remove("hidden");
+    document.getElementById("historicoJogosContainer").classList.add("hidden");
+    document.getElementById("leaderboardContainer").classList.add("hidden");
     document.getElementById("mensagem").textContent = `Escolha um número entre 1 e ${nivel.maxNum}`;
     document.getElementById("tentativas").textContent = `Tentativas restantes: ${tentativasRestantes}`;
     document.getElementById("dicas").textContent = "";
+    document.getElementById("historicoTentativas").innerHTML = "";
 }
 
 function fazerPalpite() {
     const guess = Number(document.getElementById("guess").value);
 
-    if (!Number.isInteger(guess) || guess < 1 || guess > numeroSecreto) {
-        alert(`Por favor, digite um número inteiro entre 1 e ${numeroSecreto}.`);
+    const nivel = niveis[nivelSelecionado] || niveis.medio;
+
+    if (!Number.isInteger(guess) || guess < 1 || guess > nivel.maxNum) {
+        alert(`Por favor, digite um número inteiro entre 1 e ${nivel.maxNum}.`);
         return;
     }
 
@@ -55,12 +74,13 @@ function fazerPalpite() {
         console.log("Acertou!");
 
         let historicoJogos = JSON.parse(localStorage.getItem('historicoJogos')) || [];
-        historicoJogos.push({ numeroSecreto, rodada, timeTaken });
+        let jogoNumero = historicoJogos.length + 1;
+        historicoJogos.push({ jogoNumero, numeroSecreto, rodada, timeTaken, nivel: nivelSelecionado, tentativas: [...historicoTentativas], status: 'Acertou' });
         localStorage.setItem('historicoJogos', JSON.stringify(historicoJogos));
 
         let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
-        leaderboard.push({ rodada, timeTaken });
-        leaderboard.sort((a, b) => a.rodada - b.rodada || a.timeTaken - b.timeTaken);
+        leaderboard.push({ jogoNumero, rodada, timeTaken, nivel: nivelSelecionado });
+        ordenarLeaderboard(leaderboard);
         localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
 
         atualizarHistorico();
@@ -68,17 +88,17 @@ function fazerPalpite() {
 
         document.getElementById("game").classList.add("hidden");
         document.getElementById("configuracao").classList.remove("hidden");
+        document.getElementById("historicoJogosContainer").classList.remove("hidden");
+        document.getElementById("leaderboardContainer").classList.remove("hidden");
         return;
     } else if (numeroSecreto > guess) {
         alert(`Puts, o número secreto é maior que ${guess}`);
         historicoTentativas.push(`${guess} (↑)`);
         console.log("Errou!!");
-        playSound();
     } else if (numeroSecreto < guess) {
         alert(`Bah, o número secreto é menor que ${guess}`);
         historicoTentativas.push(`${guess} (↓)`);
         console.log("Errou!!");
-        playSound();
     }
 
     if (rodada === Math.ceil(tentativasRestantes / 2)) {
@@ -89,35 +109,88 @@ function fazerPalpite() {
     tentativasRestantes--;
 
     document.getElementById("tentativas").textContent = `Tentativas restantes: ${tentativasRestantes}`;
+    document.getElementById("historicoTentativas").innerHTML = historicoTentativas.join(", ");
 
     if (tentativasRestantes === 0) {
+        let endTime = Date.now();
+        let timeTaken = ((endTime - startTime) / 1000).toFixed(2);
         alert(`Que lascada, não acertasse de jeito nenhum!\nO número secreto era ${numeroSecreto}`);
         console.log("Errou tudo!");
-        playSound();
+
+        let historicoJogos = JSON.parse(localStorage.getItem('historicoJogos')) || [];
+        let jogoNumero = historicoJogos.length + 1;
+        historicoJogos.push({ jogoNumero, numeroSecreto, rodada, timeTaken, nivel: nivelSelecionado, tentativas: [...historicoTentativas], status: 'Errou' });
+        localStorage.setItem('historicoJogos', JSON.stringify(historicoJogos));
+
+        let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+        leaderboard.push({ jogoNumero, rodada, timeTaken, nivel: nivelSelecionado });
+        ordenarLeaderboard(leaderboard);
+        localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+
+        atualizarHistorico();
+        atualizarLeaderboard();
+
         document.getElementById("game").classList.add("hidden");
         document.getElementById("configuracao").classList.remove("hidden");
+        document.getElementById("historicoJogosContainer").classList.remove("hidden");
+        document.getElementById("leaderboardContainer").classList.remove("hidden");
     }
-}
-
-function playSound() {
-    let audio = new Audio('https://www.soundjay.com/button/beep-07.wav');
-    audio.play().catch(error => console.log(error));
 }
 
 function atualizarHistorico() {
     let historicoJogos = JSON.parse(localStorage.getItem('historicoJogos')) || [];
     let historicoJogosElement = document.getElementById('historicoJogos');
-    historicoJogosElement.innerHTML = "<h2>Histórico de Jogos</h2>";
-    historicoJogos.forEach((jogo, index) => {
-        historicoJogosElement.innerHTML += `<p>Jogo ${index + 1}: Número Secreto: ${jogo.numeroSecreto}, Tentativas: ${jogo.rodada}, Tempo: ${jogo.timeTaken} segundos</p>`;
+    historicoJogosElement.innerHTML = "";
+    historicoJogos.forEach((jogo) => {
+        let jogoElement = document.createElement('p');
+        jogoElement.innerHTML = `Jogo ${jogo.jogoNumero}: Número Secreto: ${jogo.numeroSecreto}, Tentativas: ${jogo.rodada}, Tempo: ${jogo.timeTaken} segundos, Dificuldade: ${jogo.nivel}, Status: ${jogo.status}`;
+        jogoElement.addEventListener('click', () => {
+            alert(`Tentativas do Jogo ${jogo.jogoNumero}:\n${jogo.tentativas.join("\n")}`);
+        });
+        historicoJogosElement.appendChild(jogoElement);
     });
 }
 
 function atualizarLeaderboard() {
     let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+    ordenarLeaderboard(leaderboard);
     let leaderboardElement = document.getElementById('leaderboard');
-    leaderboardElement.innerHTML = "<h2>Leaderboard</h2>";
+    leaderboardElement.innerHTML = "";
     leaderboard.forEach((entry, index) => {
-        leaderboardElement.innerHTML += `<p>${index + 1}. ${entry.rodada} tentativas, ${entry.timeTaken} segundos</p>`;
+        leaderboardElement.innerHTML += `<p>${index + 1}. Jogo ${entry.jogoNumero}, ${entry.rodada} tentativas, ${entry.timeTaken} segundos, Dificuldade: ${entry.nivel}</p>`;
     });
+}
+
+function deletarHistorico() {
+    localStorage.removeItem('historicoJogos');
+    atualizarHistorico();
+}
+
+function deletarLeaderboard() {
+    localStorage.removeItem('leaderboard');
+    atualizarLeaderboard();
+}
+
+function mudarOrientacao(elementId) {
+    const element = document.getElementById(elementId);
+    if (element.style.flexDirection === 'column') {
+        element.style.flexDirection = 'row';
+    } else {
+        element.style.flexDirection = 'column';
+    }
+}
+
+function mudarOrdemLeaderboard() {
+    ordenarPorTentativas = !ordenarPorTentativas;
+    const ordenarButton = document.getElementById('ordenarLeaderboard');
+    ordenarButton.textContent = ordenarPorTentativas ? "Ordenado por: Tentativas" : "Ordenado por: Tempo";
+    atualizarLeaderboard();
+}
+
+function ordenarLeaderboard(leaderboard) {
+    if (ordenarPorTentativas) {
+        leaderboard.sort((a, b) => a.rodada - b.rodada || a.timeTaken - b.timeTaken);
+    } else {
+        leaderboard.sort((a, b) => a.timeTaken - b.timeTaken || a.rodada - b.rodada);
+    }
 }
