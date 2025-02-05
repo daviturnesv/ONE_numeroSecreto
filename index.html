@@ -18,13 +18,30 @@
             <img src="./img/robot.png" alt="robô mergulhador" class="container__imagem-robo" />
             <div class="container__informacoes">
                 <img src="./img/trophy.png" alt="ícone de um troféu" />
-                 <div class="container__texto">
-                    <h1>Você <span class="container__texto-azul">acertou!</span></h1>
-                    <h2>Você descobriu o número secreto!</h2>
+                <div class="container__texto">
+                    <h1>Jogo do Número Secreto</h1>
+                    <div id="configuracao">
+                        <h2>Escolha o nível de dificuldade:</h2>
+                        <select id="nivel">
+                            <option value="facil">Fácil</option>
+                            <option value="medio">Médio</option>
+                            <option value="dificil">Difícil</option>
+                        </select>
+                        <button class="container__botao" onclick="iniciarJogo()">Iniciar Jogo</button>
+                    </div>
+                    <div id="game" class="hidden">
+                        <h2 id="mensagem"></h2>
+                        <input type="number" id="guess" min="1" max="100">
+                        <button class="container__botao" onclick="fazerPalpite()">Adivinhar</button>
+                        <p id="tentativas"></p>
+                        <p id="dicas"></p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <div id="historicoJogos"></div>
+    <div id="leaderboard"></div>
     <script src="app.js" defer></script>
 </body>
 
