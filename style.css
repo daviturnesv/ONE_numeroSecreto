@@ -15,6 +15,21 @@ body {
     padding: 20px;
 }
 
+body.tema-claro {
+    background: linear-gradient(#f0f0f0 0%, #e0e0e0 100%);
+    color: #333;
+}
+
+body.tema-escuro {
+    background: linear-gradient(#1354A5 0%, #041832 33.33%, #041832 66.67%, #01080E 100%);
+    color: white;
+}
+
+body.tema-roxo {
+    background: linear-gradient(#8e44ad 0%, #9b59b6 100%);
+    color: #f0e6f6;
+}
+
 body::before {
     background-image: url("img/code.png");
     background-repeat: no-repeat;
@@ -80,6 +95,17 @@ body::before {
     cursor: pointer;
 }
 
+.container__botao.tema-claro {
+    background: #888;
+    color: #ffffff;
+}
+
+.container__botao.tema-roxo {
+    background: #9b59b6;
+    color: #f0e6f6;
+    border: 1px solid #6c3483;
+}
+
 .container__texto {
     margin: 16px 0;
     text-align: center;
@@ -108,7 +134,7 @@ h2 {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 input, select {
@@ -121,6 +147,24 @@ input, select {
     margin-top: 8px;
     width: 100%;
     max-width: 300px;
+}
+
+input.tema-claro, select.tema-claro {
+    color: #333;
+    background-color: #ffffff;
+    border: 1px solid #888;
+}
+
+input.tema-escuro, select.tema-escuro {
+    color: white;
+    background-color: #041832;
+    border: 1px solid #1875E8;
+}
+
+input.tema-roxo, select.tema-roxo {
+    color: #f0e6f6;
+    background-color: #8e44ad;
+    border: 1px solid #6c3483;
 }
 
 input::placeholder, select::placeholder {
@@ -138,6 +182,15 @@ input::placeholder, select::placeholder {
     overflow-y: auto;
     max-height: 300px;
     z-index: 1;
+}
+
+#historicoJogosContainer.tema-claro, #leaderboardContainer.tema-claro {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+#historicoJogosContainer.tema-roxo, #leaderboardContainer.tema-roxo {
+    background-color: rgba(142, 68, 173, 0.8);
+    border: 1px solid #6c3483;
 }
 
 #historicoJogos, #leaderboard {
@@ -158,8 +211,25 @@ input::placeholder, select::placeholder {
     transition: transform 0.3s ease;
 }
 
+#historicoJogos p.tema-claro, #leaderboard p.tema-claro {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+#historicoJogos p.tema-roxo, #leaderboard p.tema-roxo {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid #6c3483;
+}
+
 #historicoJogos p:hover, #leaderboard p:hover {
     transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+#historicoJogos p.tema-claro:hover, #leaderboard p.tema-claro:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+#historicoJogos p.tema-roxo:hover, #leaderboard p.tema-roxo:hover {
     background-color: rgba(255, 255, 255, 0.2);
 }
 

@@ -28,6 +28,11 @@
                                 <option value="medio">Médio</option>
                                 <option value="dificil">Difícil</option>
                             </select>
+                            <h2>Escolha o tema:</h2>
+                            <select id="tema">
+                                <option value="escuro">Azul-Escuro</option>
+                                <option value="roxo">Roxo</option>
+                            </select>
                             <button class="container__botao" onclick="iniciarJogo()">Iniciar Jogo</button>
                         </div>
                         <div id="game" class="hidden">
@@ -36,6 +41,7 @@
                             <button class="container__botao" onclick="fazerPalpite()">Adivinhar</button>
                             <p id="tentativas"></p>
                             <p id="dicas"></p>
+                            <p id="temporizador"></p>
                             <div id="historicoTentativas"></div>
                         </div>
                     </div>
@@ -43,17 +49,17 @@
             </div>
         </div>
         <div class="container__right">
-            <div id="historicoJogosContainer">
+            <div id="historicoJogosContainer" class="tema-escuro">
                 <h2>Histórico de Jogos</h2>
-                <button class="container__botao" onclick="deletarHistorico()">Deletar Histórico</button>
-                <button class="container__botao" onclick="mudarOrientacao('historicoJogos')">Mudar Orientação</button>
+                <button class="container__botao tema-escuro" onclick="deletarHistorico()">Deletar Histórico</button>
+                <button class="container__botao tema-escuro" onclick="mudarOrientacao('historicoJogos')">Mudar Orientação</button>
                 <div id="historicoJogos"></div>
             </div>
-            <div id="leaderboardContainer">
+            <div id="leaderboardContainer" class="tema-escuro">
                 <h2>Leaderboard</h2>
-                <button class="container__botao" onclick="deletarLeaderboard()">Deletar Leaderboard</button>
-                <button class="container__botao" onclick="mudarOrientacao('leaderboard')">Mudar Orientação</button>
-                <button class="container__botao" id="ordenarLeaderboard" onclick="mudarOrdemLeaderboard()">Ordenado por: Tentativas</button>
+                <button class="container__botao tema-escuro" onclick="deletarLeaderboard()">Deletar Leaderboard</button>
+                <button class="container__botao tema-escuro" onclick="mudarOrientacao('leaderboard')">Mudar Orientação</button>
+                <button class="container__botao tema-escuro" id="ordenarLeaderboard" onclick="mudarOrdemLeaderboard()">Ordenado por: Tentativas</button>
                 <div id="leaderboard"></div>
             </div>
         </div>
