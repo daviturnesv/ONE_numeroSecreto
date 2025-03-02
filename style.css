@@ -250,3 +250,103 @@ input::placeholder, select::placeholder {
         transform: translateY(0);
     }
 }
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: #041832;
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid #1875E8;
+    width: 80%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal.tema-roxo .modal-content {
+    background-color: #8e44ad;
+    border: 1px solid #6c3483;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: white;
+}
+
+.tentativas-list {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tentativas-list p {
+    padding: 5px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.dica-animada {
+    animation: pulseDica 2s ease-in-out infinite; /* Pulsa continuamente por 2 segundos */
+    color: #1875E8;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+@keyframes pulseDica {
+    0% { transform: scale(1); box-shadow: 0 0 0 rgba(24, 117, 232, 0); }
+    50% { transform: scale(1.1); box-shadow: 0 0 15px rgba(24, 117, 232, 0.7); }
+    100% { transform: scale(1); box-shadow: 0 0 0 rgba(24, 117, 232, 0); }
+}
+
+.tentativa-item {
+    display: flex;
+    align-items: center;
+    margin: 6px 0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    animation: fadeIn 0.3s ease-in-out;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+
+.numero-tentativa {
+    min-width: 60px;
+}
+
+.indicador-proximidade {
+    display: inline-block;
+    width: 100px;
+    height: 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    position: relative;
+}
+
+.valor-proximidade {
+    position: absolute;
+    font-size: 10px;
+    right: -28px;
+    top: -3px;
+}
