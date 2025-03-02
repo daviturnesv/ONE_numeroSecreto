@@ -251,6 +251,18 @@ input::placeholder, select::placeholder {
     }
 }
 
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
 .modal {
     display: none;
     position: fixed;
@@ -349,4 +361,23 @@ input::placeholder, select::placeholder {
     font-size: 10px;
     right: -28px;
     top: -3px;
+}
+
+.narrador-opcao {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.narrador-opcao input[type="checkbox"] {
+    width: auto;
+    max-width: none;
+    margin: 0;
+}
+
+.narrador-opcao label {
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
 }
