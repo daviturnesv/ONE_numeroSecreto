@@ -31,7 +31,7 @@ O Jogo do Número Secreto é um projeto interativo e divertido onde os jogadores
 
 1. Clone este repositório:
 ```bash
-git clone https://github.com/seu-usuario/numero-secreto.git
+git clone https://github.com/daviturnesv/ONE_numeroSecreto#
 ```
 
 2. Abra o arquivo `index.html` em seu navegador
